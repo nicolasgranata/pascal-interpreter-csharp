@@ -60,5 +60,24 @@
             //Assert
             Assert.Equal(expected, result);
         }
+
+        [Theory]
+        [InlineData("12 -2 -2", 8)]
+        [InlineData("2- 14 - 2", -14)]
+        [InlineData(" 22-21-1 ", 0)]
+        [InlineData("2 - 1 - 1", 0)]
+        [InlineData(" 1 - 2-1", -2)]
+        [InlineData(" 2 -  1 - 1", 0)]
+        public void Subtract_ThreeNumbers_SkipWhitespaces(string input, int expected)
+        {
+            //Arrange
+            var interpreter = new Interpreter(input);
+
+            //Act
+            var result = interpreter.Expr();
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
     }
 }

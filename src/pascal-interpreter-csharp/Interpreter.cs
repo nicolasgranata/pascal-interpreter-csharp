@@ -70,7 +70,7 @@
             }
             else
             {
-                throw new Exception("Error parsing input");
+                throw new Exception("Invalid syntax exception");
             }
         }
     }
