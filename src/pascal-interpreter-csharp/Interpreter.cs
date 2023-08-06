@@ -15,49 +15,51 @@
         public int Expr()
         {
             _currentToken = _lexer.GetNextToken(_text);
-            var left = int.Parse(_currentToken.Value);
+
+            var term = GetTerm();
+
+            var result = int.Parse(term);
+
+            while (_currentToken.Type == TokenType.PLUS || _currentToken.Type == TokenType.MINUS 
+                || _currentToken.Type == TokenType.MULTIPLICATION
+                || _currentToken.Type == TokenType.DIVISION)
+            {
+                if (_currentToken.Type == TokenType.PLUS)
+                {
+                    Eat(TokenType.PLUS);
+                    term = GetTerm();
+                    result += int.Parse(term);                 
+                }
+                if (_currentToken.Type == TokenType.MINUS)
+                {
+                    Eat(TokenType.MINUS);
+                    term = GetTerm();
+                    result -= int.Parse(term);
+                }
+
+                if (_currentToken.Type == TokenType.MULTIPLICATION)
+                {
+                    Eat(TokenType.MULTIPLICATION);
+                    term = GetTerm();
+                    result *= int.Parse(term);
+                }
+
+                if (_currentToken.Type == TokenType.DIVISION)
+                {
+                    Eat(TokenType.DIVISION);
+                    term = GetTerm();
+                    result /= int.Parse(term);
+                }
+            }
+
+            return result;
+        }
+
+        private string GetTerm()
+        {
+            var token = _currentToken;
             Eat(TokenType.INTEGER);
-            var operation = _currentToken.Type;
-            
-            if (operation == TokenType.PLUS)
-            {
-                Eat(TokenType.PLUS);
-            }
-
-            if (operation == TokenType.MINUS)
-            {
-                Eat(TokenType.MINUS);
-            }
-
-            if (operation == TokenType.MULTIPLICATION)
-            {
-                Eat(TokenType.MULTIPLICATION);
-            }
-
-            if (operation == TokenType.DIVISION)
-            {
-                Eat(TokenType.DIVISION);
-            }
-
-            var right = int.Parse(_currentToken.Value);
-            Eat(TokenType.INTEGER);
-
-            if (operation == TokenType.PLUS)
-            {
-                return left + right;
-            }
-            if (operation == TokenType.MINUS)
-            {
-                return left - right;
-            }
-            if (operation == TokenType.MULTIPLICATION)
-            {
-                return left * right;
-            }
-            else
-            {
-                return left / right;
-            }
+            return token.Value;
         }
 
         private void Eat(TokenType tokenType)
