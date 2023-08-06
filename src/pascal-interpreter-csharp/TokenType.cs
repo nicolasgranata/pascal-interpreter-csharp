@@ -11,6 +11,8 @@ namespace pascal_interpreter_csharp
         INTEGER,
         PLUS,
         MINUS,
+        MULTIPLICATION,
+        DIVISION,
         EOF,
         NONE
     }

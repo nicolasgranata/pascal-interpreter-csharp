@@ -33,7 +33,7 @@
                     currentChar = MoveNext(text);
                 }
 
-                if (currentChar == '+' || currentChar == '-')
+                if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/')
                 {
                     return GetToken(TokenType.INTEGER, currentChars);
                 }
@@ -46,19 +46,21 @@
                 return GetToken(TokenType.INTEGER, currentChars);
             }
 
-            if (currentChar == '+')
-            {
-                _position += 1;
-                return GetToken(TokenType.PLUS, "+");
-            }
+            return GetTokenOperation(currentChar);
+        }
 
-            if (currentChar == '-')
-            {
-                _position += 1;
-                return GetToken(TokenType.MINUS, "-");
-            }
+        private Token GetTokenOperation(char? currentChar)
+        {
+            _position += 1;
 
-            throw new Exception("Error parsing input");
+            return currentChar switch
+            {
+                '+' => GetToken(TokenType.PLUS, "+"),
+                '-' => GetToken(TokenType.MINUS, "-"),
+                '*' => GetToken(TokenType.MULTIPLICATION, "*"),
+                '/' => GetToken(TokenType.DIVISION, "/"),
+                _ => throw new Exception("Error parsing input")
+            };
         }
 
         private char? SkipWhiteSpace(char? currentChar, string text)

@@ -23,11 +23,22 @@
             {
                 Eat(TokenType.PLUS);
             }
-            else
+
+            if (operation == TokenType.MINUS)
             {
                 Eat(TokenType.MINUS);
             }
-            
+
+            if (operation == TokenType.MULTIPLICATION)
+            {
+                Eat(TokenType.MULTIPLICATION);
+            }
+
+            if (operation == TokenType.DIVISION)
+            {
+                Eat(TokenType.DIVISION);
+            }
+
             var right = int.Parse(_currentToken.Value);
             Eat(TokenType.INTEGER);
 
@@ -35,9 +46,17 @@
             {
                 return left + right;
             }
-            else
+            if (operation == TokenType.MINUS)
             {
                 return left - right;
+            }
+            if (operation == TokenType.MULTIPLICATION)
+            {
+                return left * right;
+            }
+            else
+            {
+                return left / right;
             }
         }
 
