@@ -17,10 +17,9 @@
             _currentToken = _lexer.GetNextToken(_text);
 
             var term = GetTerm();
-
-            var result = int.Parse(term);
-
-            while (_currentToken.Type == TokenType.PLUS || _currentToken.Type == TokenType.MINUS 
+            var result = term;
+           
+            while (_currentToken.Type == TokenType.PLUS || _currentToken.Type == TokenType.MINUS
                 || _currentToken.Type == TokenType.MULTIPLICATION
                 || _currentToken.Type == TokenType.DIVISION)
             {
@@ -28,38 +27,38 @@
                 {
                     Eat(TokenType.PLUS);
                     term = GetTerm();
-                    result += int.Parse(term);                 
+                    result += term;
                 }
                 if (_currentToken.Type == TokenType.MINUS)
                 {
                     Eat(TokenType.MINUS);
                     term = GetTerm();
-                    result -= int.Parse(term);
+                    result -= term;
                 }
 
                 if (_currentToken.Type == TokenType.MULTIPLICATION)
                 {
                     Eat(TokenType.MULTIPLICATION);
                     term = GetTerm();
-                    result *= int.Parse(term);
+                    result *= term;
                 }
 
                 if (_currentToken.Type == TokenType.DIVISION)
                 {
                     Eat(TokenType.DIVISION);
                     term = GetTerm();
-                    result /= int.Parse(term);
+                    result /= term;
                 }
             }
 
             return result;
         }
 
-        private string GetTerm()
+        private int GetTerm()
         {
             var token = _currentToken;
             Eat(TokenType.INTEGER);
-            return token.Value;
+            return int.Parse(token.Value);
         }
 
         private void Eat(TokenType tokenType)

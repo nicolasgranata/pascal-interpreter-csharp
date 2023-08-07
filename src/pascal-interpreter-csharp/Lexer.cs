@@ -3,57 +3,53 @@
     internal class Lexer
     {
         private int _position = 0;
+        private char? _currentChar = null;
+        private string _currentChars = string.Empty;
 
         internal Token GetNextToken(string text)
         {
-            if (_position > text.Length - 1)
+            if (_position <= text.Length - 1)
             {
-                return new Token(TokenType.EOF, null);
+                _currentChar = text[_position];               
             }
 
-            char? currentChar = text[_position];
+            _currentChars = string.Empty;
 
-            string currentChars = string.Empty;
-
-            currentChar = SkipWhiteSpace(currentChar, text);
-
-            while (currentChar.HasValue && char.IsDigit(currentChar.Value))
+            while (_currentChar.HasValue)
             {
-                currentChars += currentChar;
+                SkipWhiteSpace(text);
 
-                currentChar = MoveNext(text);
-
-                if (currentChar is null)
+                if (_currentChar.HasValue && char.IsDigit(_currentChar.Value))
                 {
-                    return GetToken(TokenType.INTEGER, currentChars);
+                    return GetInteger(text);
                 }
 
-                if (char.IsWhiteSpace(currentChar.Value))
+                if (_currentChar.HasValue)
                 {
-                    currentChar = MoveNext(text);
-                }
-
-                if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/')
-                {
-                    return GetToken(TokenType.INTEGER, currentChars);
-                }
+                    return GetTokenOperation();
+                }           
             }
 
-            currentChar = SkipWhiteSpace(currentChar, text);
-
-            if (currentChar is null)
-            {
-                return GetToken(TokenType.INTEGER, currentChars);
-            }
-
-            return GetTokenOperation(currentChar);
+            return new Token(TokenType.EOF, null);
         }
 
-        private Token GetTokenOperation(char? currentChar)
+        private Token GetInteger(string text)
+        {
+            while (_currentChar.HasValue && char.IsDigit(_currentChar.Value))
+            {
+                _currentChars += _currentChar;
+
+                MoveNext(text);
+            }
+
+            return GetToken(TokenType.INTEGER, _currentChars);
+        }
+
+        private Token GetTokenOperation()
         {
             _position += 1;
 
-            return currentChar switch
+            return _currentChar switch
             {
                 '+' => GetToken(TokenType.PLUS, "+"),
                 '-' => GetToken(TokenType.MINUS, "-"),
@@ -63,27 +59,27 @@
             };
         }
 
-        private char? SkipWhiteSpace(char? currentChar, string text)
+        private void SkipWhiteSpace(string text)
         {
-            while (currentChar.HasValue && char.IsWhiteSpace(currentChar.Value))
+            while (_currentChar.HasValue && char.IsWhiteSpace(_currentChar.Value))
             {
-                currentChar = MoveNext(text);
+                MoveNext(text);
             }
-
-            return currentChar;
         }
 
-        private char? MoveNext(string text)
+        private void MoveNext(string text)
         {
             _position++;
 
             // Return null value if no other exits
             if (_position > text.Length - 1)
             {
-                return null;
+                _currentChar = null;
             }
-
-            return text[_position];
+            else
+            {
+                _currentChar = text[_position];
+            }
         }
 
         private static Token GetToken(TokenType type, string value)

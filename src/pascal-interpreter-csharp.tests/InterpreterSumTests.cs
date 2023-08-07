@@ -47,7 +47,7 @@ namespace pascal_interpreter_csharp.tests
         [InlineData(" 1 + 2", 3)]
         [InlineData("1 + 2 ", 3)]
         [InlineData("  1 + 2 ", 3)]
-        [InlineData("  1 + 2  ", 3)]
+        [InlineData("  1  + 2  ", 3)]
         [InlineData("  1 +  2  ", 3)]
         public void Sum_TwoNumbers_SkipWhitespaces(string input, int expected)
         {

@@ -48,7 +48,7 @@
         [InlineData("1 * 2 ", 2)]
         [InlineData("  1 * 2 ", 2)]
         [InlineData("  1 * 2  ", 2)]
-        [InlineData("  1 *  2  ", 2)]
+        [InlineData("  1  *  2  ", 2)]
         public void Multiplying_TwoNumbers_SkipWhitespaces(string input, int expected)
         {
             //Arrange
